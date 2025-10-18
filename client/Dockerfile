@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-#Etapa1 : Recursos
->>>>>>> 4e9ad9d ([commit])
 FROM node:20 AS build
 
 WORKDIR /app
@@ -12,21 +8,6 @@ RUN npm install
 
 COPY . .
 
-<<<<<<< HEAD
-RUN npm run build
-
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-
-EXPOSE  80
-
-CMD [ "nginx", "-g", "daemon off;" ]
-
-
-
-
-# Etapa de la imagen
-=======
 ARG API_HOST
 ARG API_PORT
 ARG API_BASE
@@ -49,4 +30,3 @@ EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
 
->>>>>>> 4e9ad9d ([commit])
