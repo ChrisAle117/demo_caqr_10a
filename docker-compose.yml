@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 services:
   client:
     build:
@@ -11,3 +12,69 @@ services:
 networks:
   demo-net:
     external: true
+=======
+version: '3.8'
+
+services:
+  database:
+    image: mysql:8
+    container_name: adj-database
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: adj_demo
+    ports:
+      - "3307:3306"
+    volumes:
+      - adj-volume:/var/lib/mysql
+    networks:
+      - adj-net
+    restart: unless-stopped
+
+  frontend:
+    image: client:latest
+    build:
+      context: ./client
+      args:
+        API_HOST: localhost
+        API_PORT: 8081
+        API_BASE: /adj-api
+    container_name: client
+    ports:
+      - "3000:80"
+    networks:
+      - adj-net
+    depends_on:
+      - database
+    
+
+  backend:
+    image: server:latest
+    build:
+      context: ./server
+    environment:
+      SERVER_PORT: 8080
+      DB_HOST: database
+      DB_PORT: 3306
+      DB_NAME: adj_demo
+      DB_USER: root
+      DB_PASS: root
+    container_name: adj-server
+    ports:
+      - "8081:8080"
+    networks:
+      - adj-net
+    depends_on:
+      - frontend
+
+  
+volumes:
+  adj-volume:
+    external: true
+    name: adj-volume
+    
+
+networks:
+  adj-net:
+    external: true
+    name: adj-net
+>>>>>>> 4e9ad9d ([commit])
