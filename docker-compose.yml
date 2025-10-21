@@ -1,7 +1,6 @@
 services:
   database:
     image: mysql:8
-    container_name: adj-database
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: adj-demo
@@ -12,7 +11,6 @@ services:
     networks:
       - adj-net
     restart: unless-stopped
-
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
@@ -28,7 +26,6 @@ services:
         API_HOST: localhost
         API_PORT: 8081
         API_BASE: /adj-api
-    container_name: adj-client
     ports:
       - "3000:80"
     networks:
@@ -47,7 +44,6 @@ services:
       DB_NAME: adj-demo
       DB_USER: root
       DB_PASS: root
-    container_name: adj-server
     ports:
       - "8081:8080"
     networks:
