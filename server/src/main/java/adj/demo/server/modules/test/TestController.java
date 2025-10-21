@@ -16,7 +16,8 @@ public class TestController {
     @GetMapping("")
     public ResponseEntity<?> getResponse() {
         HashMap<String, Object> response = new HashMap<>();
-        response.put("message", "Test API funcionando");
+        response.put("message", "API funcionando");
+        response.put("data", "OK");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

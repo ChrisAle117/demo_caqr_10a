@@ -14,16 +14,18 @@ public class DBConnection {
 
     @Value("${db.port}")
     private String port;
+
     @Value("${db.name}")
     private String name;
+
     @Value("${db.user}")
     private String user;
+
     @Value("${db.pass}")
     private String pass;
 
-
     @Bean
-    public DataSource getDbConnection() {
+    public DataSource getDBConnection() {
         DriverManagerDataSource source = new DriverManagerDataSource();
         source.setDriverClassName("com.mysql.cj.jdbc.Driver");
         source.setUrl("jdbc:mysql://" + host + ":" + port + "/" + name);
@@ -31,5 +33,4 @@ public class DBConnection {
         source.setPassword(pass);
         return source;
     }
-
 }
