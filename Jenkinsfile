@@ -34,18 +34,6 @@ pipeline {
             }
         }
 
-
-        // Eliminar contenedores adj-database, adj-client y adj-backend si existen
-        stage('Eliminando contenedores existentes...') {
-            steps {
-                bat '''
-                    docker rm -f adj-database || exit /b 0
-                    docker rm -f adj-client || exit /b 0
-                    docker rm -f adj-backend || exit /b 0
-                '''
-            }
-        }
-
         // Construir y levantar los servicios
         stage('Construyendo y desplegando servicios...') {
             steps {
