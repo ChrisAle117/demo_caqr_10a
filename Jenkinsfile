@@ -34,6 +34,15 @@ pipeline {
             }
         }
 
+        // Eliminar contenedor adj-database si existe
+        stage('Eliminando contenedor adj-database si existe...') {
+            steps {
+                bat '''
+                    docker rm -f adj-database || exit /b 0
+                '''
+            }
+        }
+
         // Construir y levantar los servicios
         stage('Construyendo y desplegando servicios...') {
             steps {
