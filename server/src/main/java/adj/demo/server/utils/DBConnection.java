@@ -27,10 +27,12 @@ public class DBConnection {
     @Bean
     public DataSource getDBConnection() {
         DriverManagerDataSource source = new DriverManagerDataSource();
-        source.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        source.setDriverClassName("com.mysql.jdbc.Driver");
         source.setUrl("jdbc:mysql://" + host + ":" + port + "/" + name);
         source.setUsername(user);
         source.setPassword(pass);
+
         return source;
     }
+
 }

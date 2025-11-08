@@ -1,10 +1,11 @@
 const TestController = {};
 const ENV = import.meta.env;
 
-//http://localhost:8081/adj-api
-const API_URL = `http://${ENV.VITE_API_HOST}:${ENV.VITE_API_PORT}${ENV.VITE_API_BASE}`;
+// http://localhost:8081/adj-api
 
-TestController.callToAPI = async () => {
+const API_URL= `${ENV.VITE_API_PROTOCOL}://${ENV.VITE_API_HOST}:${ENV.VITE_API_PORT}${ENV.VITE_API_BASE}`;
+
+TestController.calltoAPI = async () => {
     await fetch(`${API_URL}/test`, {
         method: 'GET',
         headers: {

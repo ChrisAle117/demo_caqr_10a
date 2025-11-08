@@ -3,8 +3,8 @@ services:
     image: mysql:8
     container_name: adj-database
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: adj-demo
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=adj-demo
     ports:
       - "3307:3306"
     volumes:
@@ -13,43 +13,56 @@ services:
       - adj-net
     restart: unless-stopped
 
-  frontend:
-    image: client:latest
-    build: 
-      context: ./client
-      args:
-        API_HOST: localhost
-        API_PORT: 8081
-        API_BASE: /adj-api
-    container_name: adj-client
-    ports:
-      - "3000:80"
-    networks:
-      - adj-net
-    depends_on:
-      - database
-
-  backend:
+  backend: # Lo moví arriba para seguir la dependencia
     image: server:latest
-    build: 
-      context: ./server
+    build:
+      context: ./server  # <-- ¡CORRECCIÓN! Debe saber dónde construir la imagen
     environment:
-      SERVER_PORT: 8080
-      DB_HOST: database
-      DB_PORT: 3306
-      DB_NAME: adj-demo
-      DB_USER: root
-      DB_PASS: root
+      - SERVER_PORT=8080 # Puerto interno del contenedor (8081 en tu mapeo)
+      - DB_HOST=database # ¡CORRECTO! Usa el nombre del servicio
+      - DB_PORT=3306     # Puerto interno estándar de MySQL
+      - DB_NAME=adj-demo
+      - DB_USER=root
+      - DB_PASS=root
+      - SERVER_SSL_ENABLED=true
+      - SERVER_SSL_KEYSTORE=/etc/letsencrypt/live/localhost/keystore.p12
+      - SERVER_SSL_KEYSTORE-PASS=changeit
     container_name: adj-server
     ports:
       - "8081:8080"
     networks:
       - adj-net
+
+    volumes:
+      - certbot-conf:/etc/letsencrypt:ro
     depends_on:
-      - frontend
+      - database        # <-- ¡CORRECCIÓN! Backend depende de Database
+
+  frontend:
+    image: client:latest
+    build:
+      context: ./client
+      args:
+        API_HOST: localhost
+        API_PORT: 8081
+        API_BASE: /adj-api
+        API_PROTOCOL: https
+    container_name: adj-client
+    ports:
+      - "3000:443"
+      - "80:80"
+    networks:
+      - adj-net
+
+    volumes:
+      - certbot-conf:/etc/letsencrypt:ro
+    depends_on:
+      - backend      
 
 volumes:
   adj-volume:
+    external: true
+  certbot-conf:
     external: true
 
 networks:
